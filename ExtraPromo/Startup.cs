@@ -1,4 +1,6 @@
 using Cassandra;
+using ExtraPromo.Authentication;
+using ExtraPromo.Authentication.Interfaces;
 using ExtraPromo.DB.Cassandra;
 using ExtraPromo.DB.Cassandra.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -29,6 +31,9 @@ namespace ExtraPromo
             services.AddSingleton<ICassandraDbConnectionProvider, CassandraDbConnectionProvider>(x =>
                 new CassandraDbConnectionProvider(localhostCluster));
             services.AddSingleton<ICassandraQueryProvider, CassandraQueryProvider>();
+
+            // Authentication
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
@@ -63,9 +68,7 @@ namespace ExtraPromo
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
 
             app.UseSpa(spa =>
