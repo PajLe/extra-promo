@@ -19,4 +19,5 @@ if (environment.production) {
 platformBrowserDynamic(providers).bootstrapModule(AppModule)
   .catch(err => console.log(err));
 
-//export { renderModule, renderModuleFactory } from '@angular/platform-server';
+//export { renderModule, renderModuleFactory } from '@angular/platform-server'; - causes error: Uncaught SyntaxError: strict mode code may not contain 'with' statements
+// see : https://stackoverflow.com/questions/60114758/uncaught-syntaxerror-strict-mode-code-may-not-include-a-with-statement
