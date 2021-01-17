@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace ExtraPromo.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class TestController : ControllerBase
     {
         private readonly ICassandraDbConnectionProvider _cassandraDbConnectionProvider;
