@@ -1,4 +1,4 @@
-﻿using ExtraPromo.Authentication.Interfaces;
+﻿using ExtraPromo.Services.Authentication.Interfaces;
 using ExtraPromo.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using System;

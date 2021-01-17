@@ -1,4 +1,4 @@
-﻿using ExtraPromo.Authentication.Interfaces;
+﻿using ExtraPromo.Services.Authentication.Interfaces;
 using ExtraPromo.DB.Cassandra.Interfaces;
 using ExtraPromo.QueryEntities;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ExtraPromo.Authentication
+namespace ExtraPromo.Services.Authentication
 {
     public class AuthenticationService : IAuthenticationService
     {

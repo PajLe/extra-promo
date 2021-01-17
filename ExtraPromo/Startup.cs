@@ -1,6 +1,6 @@
 using Cassandra;
-using ExtraPromo.Authentication;
-using ExtraPromo.Authentication.Interfaces;
+using ExtraPromo.Services.Authentication;
+using ExtraPromo.Services.Authentication.Interfaces;
 using ExtraPromo.DB.Cassandra;
 using ExtraPromo.DB.Cassandra.Interfaces;
 using Microsoft.AspNetCore.Builder;
