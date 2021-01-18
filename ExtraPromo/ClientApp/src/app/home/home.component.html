@@ -1,22 +1,23 @@
-
-<div>
-  <div class="row">
-    <mat-form-field appearance="outline" class="col-4 col-centered">
-      <mat-label>Username</mat-label>
-      <input matInput placeholder="Enter your username">
-    </mat-form-field>
+<form [formGroup]="loginForm" (ngSubmit)="login()">
+  <div>
+    <div class="row">
+      <mat-form-field appearance="outline" class="col-4 col-centered">
+        <mat-label>Username</mat-label>
+        <input matInput placeholder="Enter your username" formControlName="username">
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field appearance="outline" class="col-4 col-centered">
+        <mat-label>Password</mat-label>
+        <input type="password" matInput placeholder="Enter your password" formControlName="password">
+      </mat-form-field>
+    </div>
   </div>
-  <div class="row">
-    <mat-form-field appearance="outline" class="col-4 col-centered">
-      <mat-label>Password</mat-label>
-      <input matInput placeholder="Enter your password">
-    </mat-form-field>
+
+  <div class="text-center">
+    <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">
+      Login
+    </button>
   </div>
-</div>
 
-<div class="text-center">
-  <button mat-raised-button color="primary">
-    Login
-  </button>
-</div>
-
+</form>

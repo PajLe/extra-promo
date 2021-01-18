@@ -15,6 +15,7 @@
   <ItemGroup>
     <PackageReference Include="CassandraCSharpDriver" Version="3.16.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.10" />
   </ItemGroup>
 
@@ -23,6 +24,16 @@
     <Content Remove="$(SpaRoot)**" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\src\app\_DTOs\responses\userLoginResponse.ts" />
+    <None Remove="ClientApp\src\app\_DTOs\userLoginDto.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\_DTOs\responses\userLoginResponse.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_DTOs\userLoginDto.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
