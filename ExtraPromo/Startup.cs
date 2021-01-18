@@ -36,6 +36,15 @@ namespace ExtraPromo
                 new CassandraDbConnectionProvider(localhostCluster));
             services.AddSingleton<ICassandraQueryProvider, CassandraQueryProvider>();
 
+            // CORS
+            services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
+            builder
+            .WithOrigins("https://localhost:44390/", "http://localhost:44390/", "https://localhost:44390", "http://localhost:44390")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+            ));
+
             // Authentication
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddAuthentication(options =>
@@ -76,7 +85,7 @@ namespace ExtraPromo
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection(); removed for cors
             app.UseStaticFiles();
             if (!env.IsDevelopment())
             {
@@ -84,6 +93,8 @@ namespace ExtraPromo
             }
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
 
