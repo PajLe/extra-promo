@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertifyService } from '../_services/alertify.service';
 import { AuthService } from '../_services/auth.service';
 import { UserLoginResponse } from '../_DTOs/responses/userLoginResponse';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +18,8 @@ export class HomeComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private _alertifyService: AlertifyService,
-    private _authService: AuthService
+    private _authService: AuthService,
+    private _router: Router
   ) { }
 
   ngOnInit(): void {
@@ -42,6 +44,7 @@ export class HomeComponent implements OnInit {
         this._alertifyService.error(loginResponse.message ?? "Invalid username/password combination.");
       } else {
         this._alertifyService.success(loginResponse.message ?? "Successfully logged in.");
+        this._router.navigate(["/promotions"]);
       }
     },
       error => {

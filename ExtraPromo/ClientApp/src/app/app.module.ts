@@ -18,6 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { JwtModule } from '@auth0/angular-jwt';
+import { AuthGuard } from './_services/_guards/auth.guard';
 
 
 @NgModule({
@@ -33,9 +34,28 @@ import { JwtModule } from '@auth0/angular-jwt';
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-    { path: '', component: HomeComponent, pathMatch: 'full' },
-    { path: 'counter', component: CounterComponent },
-    { path: 'fetch-data', component: FetchDataComponent },
+      {
+        path: '', component: HomeComponent, pathMatch: 'full',
+        data: {
+          forLoggedIn: false
+        },
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'promotions', component: CounterComponent,
+        data: {
+          forLoggedIn: true
+        },
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'fetch-data', component: FetchDataComponent,
+        data: {
+          forLoggedIn: true
+        },
+        canActivate: [AuthGuard]
+      },
+      { path: '**', redirectTo: '', pathMatch: 'full' }
     ], { relativeLinkResolution: 'legacy' }),
     BrowserAnimationsModule,
     MatSliderModule,

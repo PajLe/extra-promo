@@ -29,6 +29,7 @@
   <ItemGroup>
     <None Remove="ClientApp\src\app\_DTOs\responses\userLoginResponse.ts" />
     <None Remove="ClientApp\src\app\_DTOs\userLoginDto.ts" />
+    <None Remove="ClientApp\src\app\_services\routerHistoryService.ts" />
   </ItemGroup>
 
   <ItemGroup>
