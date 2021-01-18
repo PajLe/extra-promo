@@ -42,18 +42,23 @@ import { AuthGuard } from './_services/_guards/auth.guard';
         canActivate: [AuthGuard]
       },
       {
-        path: 'promotions', component: CounterComponent,
-        data: {
-          forLoggedIn: true
-        },
-        canActivate: [AuthGuard]
-      },
-      {
-        path: 'fetch-data', component: FetchDataComponent,
-        data: {
-          forLoggedIn: true
-        },
-        canActivate: [AuthGuard]
+        path: 'promotions',
+        children: [
+          {
+            path: '', component: CounterComponent,
+            data: {
+              forLoggedIn: true
+            },
+            canActivate: [AuthGuard]
+          },
+          {
+            path: 'add', component: FetchDataComponent,
+            data: {
+              forLoggedIn: true
+            },
+            canActivate: [AuthGuard]
+          }
+        ]
       },
       { path: '**', redirectTo: '', pathMatch: 'full' }
     ], { relativeLinkResolution: 'legacy' }),

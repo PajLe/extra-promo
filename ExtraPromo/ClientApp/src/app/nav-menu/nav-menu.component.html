@@ -26,14 +26,14 @@
               [routerLinkActive]="['link-active']"
               *ngIf="_authService.loggedIn()">
             <h3 class="pl-2 pr-2">
-              <a class="nav-link text-white badge badge-primary" [routerLink]="['/promotions']">Counter</a>
+              <a class="nav-link text-white badge badge-primary" [routerLink]="['/promotions']">Promotions</a>
             </h3>
           </li>
           <li class="nav-item"
               [routerLinkActive]="['link-active']"
               *ngIf="_authService.loggedIn()">
             <h3 class="pl-2 pr-2">
-              <a class="nav-link text-white badge badge-primary" [routerLink]="['/fetch-data']">Fetch data</a>
+              <a class="nav-link text-white badge badge-primary" [routerLink]="['/promotions/add']">Add promotion</a>
             </h3>
           </li>
           <li class="nav-item"
