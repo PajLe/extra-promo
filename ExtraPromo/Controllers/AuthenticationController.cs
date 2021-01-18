@@ -5,6 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using System.Security.Claims;
+using System.Text;
+using ExtraPromo.QueryEntities;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ExtraPromo.Controllers
 {
@@ -13,10 +19,13 @@ namespace ExtraPromo.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;
+        private readonly IConfiguration _configuration;
 
-        public AuthenticationController(IAuthenticationService authenticationService)
+        public AuthenticationController(IAuthenticationService authenticationService,
+            IConfiguration configuration)
         {
             _authenticationService = authenticationService;
+            _configuration = configuration;
         }
 
         [HttpPost("login")]
@@ -24,20 +33,41 @@ namespace ExtraPromo.Controllers
         {
             bool result;
             string message;
+            string jwt = null;
             try
             {
                 result = await _authenticationService.Login(userLoginInfo.Username, userLoginInfo.Password);
                 if (result)
+                {
                     message = "Successfully logged in.";
+                    jwt = GenerateToken(userLoginInfo);
+                }
                 else
                     message = "Invalid username/password combination.";
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return Problem(e.Message);
             }
 
-            return Ok(new { Status = result, Message = message });
+            return Ok(new { Status = result, Message = message, Token = jwt });
+        }
+
+        private string GenerateToken(UserRegisterLoginDto authenticatedUser)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_configuration.GetSection("AppSettings:Secret").Value);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, authenticatedUser.Username),
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
+            };
+            var createdToken = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(createdToken);
         }
     }
 }
