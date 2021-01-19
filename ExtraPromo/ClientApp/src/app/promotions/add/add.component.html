@@ -26,7 +26,7 @@
       </div>
 
       <div class="text-center">
-        <button mat-raised-button color="primary" type="submit" [disabled]="!addPromotionForm.valid">
+        <button mat-raised-button color="primary" type="submit" [disabled]="!addPromotionForm.valid || promotion.modifiers.length === 0 || promotion.actions.length === 0">
           Save
         </button>
         <button mat-stroked-button color="accent" type="button" (click)="cancel()">
@@ -37,14 +37,30 @@
     </form>
   </div>
 
-  <div class="col-md-3 border">
+  <div class="col-md border">
     <h3 class="text-warning border-bottom">Modifiers</h3>
-    <button mat-icon-button color="primary" type="button" (click)="addModifierDialog()" matTooltip="Add Modifier" matTooltipPosition="right">
+
+    <div class="row justify-content-start border-bottom mt-1" *ngFor="let modifier of promotion.modifiers; let i=index">
+      <div class="col w-50">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Type</mat-label>
+          <input readonly matInput [value]="modifier.type">
+        </mat-form-field>
+      </div>
+      <div class="col w-50">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Values</mat-label>
+          <input readonly matInput [value]="modifier.values">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <button mat-icon-button class="mt-1" color="primary" type="button" (click)="addModifierDialog()" matTooltip="Add Modifier" matTooltipPosition="right">
       <mat-icon>add_box</mat-icon>
     </button>
   </div>
 
-  <div class="col-md-3 border">
+  <div class="col-md border">
     <h3 class="text-warning border-bottom">Actions</h3>
     <button mat-icon-button color="primary" type="button" (click)="addActionDialog()" matTooltip="Add Action" matTooltipPosition="right">
       <mat-icon>add_box</mat-icon>
