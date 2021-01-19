@@ -27,14 +27,30 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\_DTOs\actionDto.ts" />
+    <None Remove="ClientApp\src\app\_DTOs\modifierDto.ts" />
+    <None Remove="ClientApp\src\app\_DTOs\promotionDto.ts" />
     <None Remove="ClientApp\src\app\_DTOs\responses\userLoginResponse.ts" />
     <None Remove="ClientApp\src\app\_DTOs\userLoginDto.ts" />
     <None Remove="ClientApp\src\app\_services\routerHistoryService.ts" />
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\_DTOs\promotionDto.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\_DTOs\actionDto.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\_DTOs\responses\userLoginResponse.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_DTOs\modifierDto.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\_DTOs\userLoginDto.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\app\promotions\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

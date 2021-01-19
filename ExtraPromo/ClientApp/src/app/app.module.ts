@@ -19,7 +19,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { JwtModule } from '@auth0/angular-jwt';
 import { AuthGuard } from './_services/_guards/auth.guard';
+import { AddComponent } from './promotions/add/add.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
+
+import { MatDialogModule } from '@angular/material/dialog';
+import { AddModifierDialogComponent } from './promotions/add/add-modifier-dialog/add-modifier-dialog.component';
+import { AddActionDialogComponent } from './promotions/add/add-action-dialog/add-action-dialog.component'; 
 
 @NgModule({
   declarations: [
@@ -27,7 +33,14 @@ import { AuthGuard } from './_services/_guards/auth.guard';
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent
+    FetchDataComponent,
+    AddComponent,
+    AddModifierDialogComponent,
+    AddActionDialogComponent
+  ],
+  entryComponents: [
+    AddModifierDialogComponent,
+    AddActionDialogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -52,7 +65,7 @@ import { AuthGuard } from './_services/_guards/auth.guard';
             canActivate: [AuthGuard]
           },
           {
-            path: 'add', component: FetchDataComponent,
+            path: 'add', component: AddComponent,
             data: {
               forLoggedIn: true
             },
@@ -79,7 +92,9 @@ import { AuthGuard } from './_services/_guards/auth.guard';
         //blacklistedRoutes: ['localhost:5000/authentication']
       }
     }),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatTooltipModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
