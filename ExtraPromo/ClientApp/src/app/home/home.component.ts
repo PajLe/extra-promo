@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
     this.loginForm = this._formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
-    })
+    });
   }
 
   login(): void {
