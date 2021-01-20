@@ -21,8 +21,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { AuthGuard } from './_services/_guards/auth.guard';
 import { AddComponent } from './promotions/add/add.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
-
+import { MatCheckboxModule } from '@angular/material/checkbox'; 
 import { MatDialogModule } from '@angular/material/dialog';
 import { AddModifierDialogComponent } from './promotions/add/add-modifier-dialog/add-modifier-dialog.component';
 import { AddActionDialogComponent } from './promotions/add/add-action-dialog/add-action-dialog.component'; 
@@ -94,7 +93,8 @@ import { AddActionDialogComponent } from './promotions/add/add-action-dialog/add
     }),
     ReactiveFormsModule,
     MatTooltipModule,
-    MatDialogModule
+    MatDialogModule,
+    MatCheckboxModule
   ],
   providers: [],
   bootstrap: [AppComponent]
