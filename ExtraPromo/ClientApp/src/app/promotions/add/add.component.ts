@@ -109,4 +109,24 @@ export class AddComponent implements OnInit {
       }
     });
   }
+
+  removeModifier(index: number): void {
+    this.promotion.modifiers = this.promotion.modifiers.filter((modifier, i) => i != index);
+  }
+
+  editModifier(index: number): void {
+    const modifierToEdit: Modifier = this.promotion.modifiers[index];
+    const dialogRef = this._matDialog.open(AddModifierDialogComponent, {
+      maxHeight: '650px',
+      width: '600px',
+      data: {
+        modifier: modifierToEdit
+      }
+    });
+    dialogRef.afterClosed().subscribe((modifier: Modifier) => {
+      if (modifier) {
+        this.promotion.modifiers[index] = modifier;
+      }
+    });
+  }
 }

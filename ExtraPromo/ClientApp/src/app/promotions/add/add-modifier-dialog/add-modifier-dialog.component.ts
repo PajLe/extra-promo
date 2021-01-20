@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { Modifier } from 'typescript';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Modifier } from '../../../_DTOs/modifierDto';
 
 @Component({
   selector: 'app-add-modifier-dialog',
@@ -16,7 +16,8 @@ export class AddModifierDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddModifierDialogComponent>,
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
   ngOnInit(): void {
@@ -40,12 +41,20 @@ export class AddModifierDialogComponent implements OnInit {
   }
 
   private initializeModifierForm(): void {
-    this.modifierForm = this._formBuilder.group({
-      type: ['', Validators.required],
-      values: this._formBuilder.array([
-        this._formBuilder.control('', Validators.required)
-      ])
-    })
+    if (this.data?.modifier) {
+      const modifierData: Modifier = this.data.modifier;
+      this.modifierForm = this._formBuilder.group({
+        type: [modifierData.type, Validators.required],
+        values: this._formBuilder.array(modifierData.values)
+      });
+    } else {
+      this.modifierForm = this._formBuilder.group({
+        type: ['', Validators.required],
+        values: this._formBuilder.array([
+          this._formBuilder.control('', Validators.required)
+        ])
+      });
+    }
   }
 
   addModifierValue(): void {
