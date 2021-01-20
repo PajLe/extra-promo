@@ -64,11 +64,23 @@
     <h3 class="text-warning border-bottom">Actions</h3>
 
     <div class="row justify-content-start border-bottom mt-1" *ngFor="let action of promotion.actions; let i=index">
-      <div class="col">
+      <div class="col-10">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Type</mat-label>
           <input readonly matInput [value]="action.type">
         </mat-form-field>
+      </div>
+      <div class="col">
+        <div class="row">
+          <button mat-icon-button color="warn" (click)="removeAction(i)">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </div>
+        <div class="row">
+          <button mat-icon-button color="basic" (click)="editAction(i)">
+            <mat-icon>create</mat-icon>
+          </button>
+        </div>
       </div>
     </div>
 

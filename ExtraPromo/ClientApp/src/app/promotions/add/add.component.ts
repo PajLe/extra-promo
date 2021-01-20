@@ -90,4 +90,23 @@ export class AddComponent implements OnInit {
     });
   }
 
+  removeAction(index: number): void {
+    this.promotion.actions = this.promotion.actions.filter((action, i) => i != index);
+  }
+
+  editAction(index: number): void {
+    const actionToEdit: Action = this.promotion.actions[index];
+    const dialogRef = this._matDialog.open(AddActionDialogComponent, {
+      maxHeight: '650px',
+      width: '600px',
+      data: {
+        action: actionToEdit
+      }
+    });
+    dialogRef.afterClosed().subscribe((action: Action) => {
+      if (action) {
+        this.promotion.actions[index] = action;
+      }
+    });
+  }
 }

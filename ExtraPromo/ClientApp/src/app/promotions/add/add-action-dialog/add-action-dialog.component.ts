@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Action } from '../../../_DTOs/actionDto';
 
 @Component({
@@ -17,7 +17,8 @@ export class AddActionDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddActionDialogComponent>,
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
   ngOnInit(): void {
@@ -38,13 +39,25 @@ export class AddActionDialogComponent implements OnInit {
   }
 
   private initializeActionForm(): void {
-    this.actionForm = this._formBuilder.group({
-      type: ['', Validators.required],
-      flatDiscount: [0.0, Validators.required],
-      percentageDiscount: [0.0, Validators.required],
-      freeShip: [false],
-      items: this._formBuilder.array([])
-    })
+    if (this.data?.action) {
+      const actionData: Action = this.data.action;
+      this.actionForm = this._formBuilder.group({
+        type: [actionData.type, Validators.required],
+        flat: [actionData.flat, Validators.required],
+        percentage: [actionData.percentage, Validators.required],
+        freeShip: [actionData.freeShip],
+        items: this._formBuilder.array(actionData.items)
+      });
+    } else {
+      this.actionForm = this._formBuilder.group({
+        type: ['', Validators.required],
+        flat: [0.0, Validators.required],
+        percentage: [0.0, Validators.required],
+        freeShip: [false],
+        items: this._formBuilder.array([])
+      });
+    }
+
   }
 
   addActionItem(): void {
@@ -64,12 +77,12 @@ export class AddActionDialogComponent implements OnInit {
   }
 
   isInvalid(): boolean {
-    const flat: number = this.actionForm.get('flatDiscount').value;
-    const percentage: number = this.actionForm.get('percentageDiscount').value;
+    const flat: number = this.actionForm.get('flat').value;
+    const percentage: number = this.actionForm.get('percentage').value;
     const freeShip: boolean = this.actionForm.get('freeShip').value;
 
-    let result: boolean = this.actionForm.get('flatDiscount').value === ''
-      && this.actionForm.get('percentageDiscount').value === ''
+    let result: boolean = this.actionForm.get('flat').value === ''
+      && this.actionForm.get('percentage').value === ''
       || flat === 0 && percentage === 0 && freeShip === false;
 
     if (this.actionForm.get('type').value !== 'Cart Discount' && this.actionItems.controls.length === 0)
@@ -79,7 +92,9 @@ export class AddActionDialogComponent implements OnInit {
   }
 
   validateFormFields(): void {
-    if (this.actionForm.get('type').value === 'Cart Discount')
+    if (this.actionForm.get('type').value === 'Cart Discount') {
       this.actionItems.controls = [];
+      this.actionForm.value.items = [];
+    }
   }
 }
