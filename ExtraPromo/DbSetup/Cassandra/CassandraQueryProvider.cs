@@ -17,6 +17,11 @@ namespace ExtraPromo.DB.Cassandra
             return await session.ExecuteAsync(statement);
         }
 
+        public async Task<RowSet> ExecuteAsync(ISession session, BoundStatement boundStatement)
+        {
+            return await session.ExecuteAsync(boundStatement);
+        }
+
         public Test GetTestData(ISession session)
         {
             IMapper mapper = new Mapper(session);

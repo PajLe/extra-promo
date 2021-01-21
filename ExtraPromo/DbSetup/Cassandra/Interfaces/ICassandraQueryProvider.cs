@@ -14,5 +14,7 @@ namespace ExtraPromo.DB.Cassandra.Interfaces
         Task<T> QuerySingleOrDefault<T>(ISession session, string cql, params object[] args);
 
         Task<RowSet> ExecuteAsync(ISession session, string cql, params object[] args);
+
+        Task<RowSet> ExecuteAsync(ISession session, BoundStatement boundStatement);
     }
 }
