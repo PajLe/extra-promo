@@ -7,5 +7,4 @@ export interface Promotion {
   description: string,
   actions: Action[];
   modifiers: Modifier[];
-  isArchived?: boolean;
 }
