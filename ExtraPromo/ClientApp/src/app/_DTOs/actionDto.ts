@@ -1,5 +1,5 @@
 export interface Action {
-  type: string[];
+  type: string;
   items?: string[];
   flat?: number;
   percentage?: number,

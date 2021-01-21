@@ -1,4 +1,4 @@
 export interface Modifier {
-  type: string[];
+  type: string;
   values: string[];
 }

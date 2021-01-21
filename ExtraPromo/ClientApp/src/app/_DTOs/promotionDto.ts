@@ -2,7 +2,7 @@ import { Action } from "./actionDto";
 import { Modifier } from "./modifierDto";
 
 export interface Promotion {
-  id: number,
+  id: string, // uuid
   type: string,
   description: string,
   actions: Action[];
