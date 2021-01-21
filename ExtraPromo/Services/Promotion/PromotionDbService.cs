@@ -1,4 +1,5 @@
 ﻿using ExtraPromo.DB.Cassandra.Interfaces;
+using ExtraPromo.DbSetup.Cassandra.Models;
 using ExtraPromo.DTOs;
 using ExtraPromo.Services.Promotion.Interfaces;
 using System;
@@ -47,16 +48,38 @@ namespace ExtraPromo.Services.Promotion
                 }
 
                 Guid promoId = Guid.NewGuid();
-                string cql = "INSERT INTO promotions (id, isarchived, type, description, modifiers, actions) VALUES (?, ?, ?, ?, ?, ?);";
+                string cql = "INSERT INTO promotions (id, type, description, modifiers, actions) VALUES (?, ?, ?, ?, ?);";
                 await _cassandraQueryProvider.ExecuteAsync(session, cql, 
                     promoId, 
-                    false, 
                     addPromotionDto.Type, 
                     addPromotionDto.Description,
                     modifierWithType,
                     actionsWithType);
 
                 return true;
+            }
+        }
+
+        public async Task<IEnumerable<GetPromotionDto>> GetAllPromotions()
+        {
+            using (var session = _cassandraDbConnectionProvider.Connect())
+            {
+                string cql = "SELECT * FROM promotions;";
+                var promotions = await _cassandraQueryProvider.FetchAsync<PromotionModel>(session, cql);
+                List<GetPromotionDto> promotionsToReturn = new List<GetPromotionDto>();
+                foreach (var promo in promotions)
+                {
+                    promotionsToReturn.Add(new GetPromotionDto
+                    {
+                        Id = promo.Id,
+                        Type = promo.Type,
+                        Description = promo.Description,
+                        Modifiers = promo.Modifiers.Select(mod => new GetPromotionModifierDto { Id = mod.Key, Type = mod.Value }),
+                        Actions = promo.Actions.Select(action => new GetPromotionActionDto { Id = action.Key, Type = action.Value })
+                    });
+                }
+                
+                return promotionsToReturn;
             }
         }
     }

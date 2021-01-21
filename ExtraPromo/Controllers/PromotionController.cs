@@ -50,5 +50,20 @@ namespace ExtraPromo.Controllers
             return Ok(new { Status = result, Message = message });
         }
 
+        [HttpGet("all")]
+        public async Task<IActionResult> GetPromotions()
+        {
+            IEnumerable<GetPromotionDto> result;
+            try
+            {
+                result = await _promotionDbService.GetAllPromotions();
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+
+            return Ok(new { Status = result });
+        }
     }
 }
