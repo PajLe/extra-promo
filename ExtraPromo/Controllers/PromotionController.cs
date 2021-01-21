@@ -63,7 +63,7 @@ namespace ExtraPromo.Controllers
                 return Problem(e.Message);
             }
 
-            return Ok(new { Status = result });
+            return Ok(result);
         }
     }
 }
