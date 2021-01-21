@@ -35,5 +35,12 @@ namespace ExtraPromo.DB.Cassandra
             T obj = await mapper.SingleOrDefaultAsync<T>(cql, args);
             return obj;
         }
+
+        public async Task<IEnumerable<T>> FetchAsync<T>(ISession session, string cql, params object[] args)
+        {
+            IMapper mapper = new Mapper(session);
+            IEnumerable<T> result = await mapper.FetchAsync<T>(cql, args);
+            return result;
+        }
     }
 }

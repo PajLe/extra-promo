@@ -16,5 +16,7 @@ namespace ExtraPromo.DB.Cassandra.Interfaces
         Task<RowSet> ExecuteAsync(ISession session, string cql, params object[] args);
 
         Task<RowSet> ExecuteAsync(ISession session, BoundStatement boundStatement);
+
+        Task<IEnumerable<T>> FetchAsync<T>(ISession session, string cql, params object[] args);
     }
 }
