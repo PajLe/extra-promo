@@ -87,14 +87,29 @@ export class AddComponent implements OnInit {
     this._router.navigate(["/promotions"]);
   }
 
-  addModifierDialog(): void {
-    const dialogRef = this._matDialog.open(AddModifierDialogComponent, {
-      maxHeight: '650px',
-      width: '600px',
-    });
+  addModifierDialog(modifier: Modifier): void {
+    let dialogRef;
+    if (modifier)
+      dialogRef = this._matDialog.open(AddModifierDialogComponent, {
+        maxHeight: '650px',
+        width: '600px',
+        data: {
+          modifier: modifier
+        }
+      });
+    else
+      dialogRef = this._matDialog.open(AddModifierDialogComponent, {
+        maxHeight: '650px',
+        width: '600px'
+      });
     dialogRef.afterClosed().subscribe((modifier: Modifier) => {
       if (modifier) {
-        this.promotion.modifiers.push(modifier);
+        if (this.promotion.modifiers.filter(mod => mod.type === modifier.type).length === 0)
+          this.promotion.modifiers.push(modifier);
+        else {
+          this._alertifyService.error("Cannot add two modifiers with the same type.");
+          this.addModifierDialog(modifier);
+        }
       }
     });
   }
