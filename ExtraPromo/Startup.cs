@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Threading.Tasks;
+using ExtraPromo.Services.Promotion;
+using ExtraPromo.Services.Promotion.Interfaces;
 
 namespace ExtraPromo
 {
@@ -62,6 +64,9 @@ namespace ExtraPromo
                         ValidateAudience = false
                     };
                 });
+
+            // Promotions
+            services.AddScoped<IPromotionDbService, PromotionDbService>();
 
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory

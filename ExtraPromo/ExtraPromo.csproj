@@ -30,6 +30,7 @@
     <None Remove="ClientApp\src\app\_DTOs\actionDto.ts" />
     <None Remove="ClientApp\src\app\_DTOs\modifierDto.ts" />
     <None Remove="ClientApp\src\app\_DTOs\promotionDto.ts" />
+    <None Remove="ClientApp\src\app\_DTOs\responses\addPromotionResponse.ts" />
     <None Remove="ClientApp\src\app\_DTOs\responses\userLoginResponse.ts" />
     <None Remove="ClientApp\src\app\_DTOs\userLoginDto.ts" />
     <None Remove="ClientApp\src\app\_services\routerHistoryService.ts" />
@@ -40,6 +41,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\_DTOs\actionDto.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\_DTOs\responses\addPromotionResponse.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\_DTOs\responses\userLoginResponse.ts" />

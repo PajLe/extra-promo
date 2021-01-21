@@ -1,10 +1,14 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { map, tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { Action } from '../../_DTOs/actionDto';
 import { Modifier } from '../../_DTOs/modifierDto';
 import { Promotion } from '../../_DTOs/promotionDto';
+import { AddPromotionResponse } from '../../_DTOs/responses/addPromotionResponse';
 import { AlertifyService } from '../../_services/alertify.service';
 import { AddActionDialogComponent } from './add-action-dialog/add-action-dialog.component';
 import { AddModifierDialogComponent } from './add-modifier-dialog/add-modifier-dialog.component';
@@ -24,7 +28,8 @@ export class AddComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _router: Router,
     private _alertifyService: AlertifyService,
-    private _matDialog: MatDialog
+    private _matDialog: MatDialog,
+    private _http: HttpClient
   ) { }
 
   ngOnInit(): void {
@@ -45,7 +50,7 @@ export class AddComponent implements OnInit {
 
   private initializePromotionObject(): void {
     this.promotion = {
-      id: -1,
+      id: "-1",
       actions: [],
       modifiers: [],
       description: '',
@@ -59,7 +64,23 @@ export class AddComponent implements OnInit {
   }
 
   add(): void {
-    
+    const promotion: Promotion = Object.assign({}, this.addPromotionForm.value);
+    promotion.actions = this.promotion.actions;
+    promotion.modifiers = this.promotion.modifiers;
+    this._http.post(environment.apiUrl + 'promotion/add', promotion).pipe(
+      tap((response: AddPromotionResponse) => {
+        if (!response.status) {
+          this._alertifyService.error(response.message ?? "Couldn't insert the promotion.");
+        } else {
+          this._alertifyService.success(response.message ?? "Successfully added the promotion.");
+          this._router.navigate(["/promotions"]);
+        }
+      },
+        error => {
+          this._alertifyService.error("Unknown error.");
+          console.log(error.message);
+        })
+    ).subscribe();
   }
 
   cancel(): void {
