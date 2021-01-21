@@ -1,4 +1,5 @@
 export interface Action {
+  id: string; // uuid
   type: string;
   items?: string[];
   flat?: number;
