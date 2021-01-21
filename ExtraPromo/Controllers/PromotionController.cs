@@ -65,5 +65,27 @@ namespace ExtraPromo.Controllers
 
             return Ok(result);
         }
+
+        [HttpDelete("delete/{promoId}")]
+        public async Task<IActionResult> DeletePromotion(string promoId)
+        {
+            bool result;
+            string message;
+            try
+            {
+                Guid id = Guid.Parse(promoId);
+                result = await _promotionDbService.DeletePromotion(id);
+                if (result)
+                    message = "Successfully deleted the promotion.";
+                else
+                    message = "Couldn't delete the promotion.";
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+
+            return Ok(new { Status = result, Message = message });
+        }
     }
 }

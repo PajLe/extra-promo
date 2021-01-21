@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Promotion } from '../../_DTOs/promotionDto';
+import { DeletePromotionResponse } from '../../_DTOs/responses/deletePromotionResponse';
 import { AlertifyService } from '../../_services/alertify.service';
 import { DeleteConfirmDialogComponent } from './delete-confirm-dialog/delete-confirm-dialog.component';
 
@@ -20,7 +22,8 @@ export class ListComponent implements OnInit {
   constructor(
     private _http: HttpClient,
     private _alertifyService: AlertifyService,
-    private _matDialog: MatDialog
+    private _matDialog: MatDialog,
+    private _router: Router
   ) { }
 
   ngOnInit(): void {
@@ -62,6 +65,19 @@ export class ListComponent implements OnInit {
   }
 
   private deletePromotion(promotion: Promotion) {
-    console.log("ASDSADASD");
+    this._http.delete(environment.apiUrl + 'promotion/delete/' + promotion.id).pipe(
+      tap((response: DeletePromotionResponse) => {
+        if (!response.status) {
+          this._alertifyService.error(response.message ?? "Couldn't delete the promotion.");
+        } else {
+          this._alertifyService.success(response.message ?? "Successfully deleted the promotion.");
+          this._router.navigate(["/promotions"]);
+        }
+      },
+        error => {
+          this._alertifyService.error("Unknown error.");
+          console.log(error.message);
+        })
+    ).subscribe();
   }
 }

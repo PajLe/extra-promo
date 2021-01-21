@@ -60,6 +60,16 @@ namespace ExtraPromo.Services.Promotion
             }
         }
 
+        public async Task<bool> DeletePromotion(Guid id)
+        {
+            using (var session = _cassandraDbConnectionProvider.Connect())
+            {
+                string cql = "DELETE FROM promotions WHERE id = ? IF EXISTS;";
+                var applied = await _cassandraQueryProvider.ExecuteAsync(session, cql, id);
+                return applied.FirstOrDefault().GetValue<bool>(0);
+            }
+        }
+
         public async Task<IEnumerable<GetPromotionDto>> GetAllPromotions()
         {
             using (var session = _cassandraDbConnectionProvider.Connect())
