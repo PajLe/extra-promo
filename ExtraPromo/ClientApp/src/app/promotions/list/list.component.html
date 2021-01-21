@@ -1,8 +1,45 @@
 <h1 class="text-warning mb-2">Promotions</h1>
 
+<div class="row" *ngFor="let promo of promotions">
+  <div class="col-11">
+    <mat-grid-list class="shadow promotion-element round mb-4"
+                   [cols]="basePromoInfoColCount + promo.modifiers.length + promo.actions.length"
+                   rowHeight="2:1"
+                   gutterSize="2px">
+      <mat-grid-tile class="id-element" rowspan=2>
+        <div style="word-break: break-all">
+          <p>
+            {{ promo.id }}
+          </p>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile class="basic-info-header">Type</mat-grid-tile>
+      <mat-grid-tile class="basic-info-header">Description</mat-grid-tile>
+      <mat-grid-tile class="modifiers-header" [colspan]="promo.modifiers.length">Modifiers</mat-grid-tile>
+      <mat-grid-tile class="actions-header" [colspan]="promo.actions.length">Actions</mat-grid-tile>
 
-<p>This is a simple example of an Angular component.</p>
+      <!-- Base promo info -->
+      <mat-grid-tile class="basic-info-element">{{ promo.type }}</mat-grid-tile>
+      <mat-grid-tile class="basic-info-element">{{ promo.description }}</mat-grid-tile>
 
-<p aria-live="polite">Current count: <strong>{{ currentCount }}</strong></p>
+      <!-- Modifiers -->
+      <mat-grid-tile class="modifiers-element" *ngFor="let mod of promo.modifiers">{{ mod.type }}</mat-grid-tile>
 
-<button class="btn btn-primary" (click)="incrementCounter()">Increment</button>
+      <!-- Actions -->
+      <mat-grid-tile class="actions-element" *ngFor="let action of promo.actions">{{ action.type }}</mat-grid-tile>
+    </mat-grid-list>
+  </div>
+
+  <div class="col">
+    <div class="row">
+      <button class="h3" mat-icon-button color="warn" (click)="removeModifier(i)" matTooltip="Delete" matTooltipPosition="right">
+        <mat-icon [inline]="true">delete_forever</mat-icon>
+      </button>
+    </div>
+    <div class="row">
+      <button class="h3" mat-icon-button color="basic" (click)="editModifier(i)" matTooltip="Edit" matTooltipPosition="right">
+        <mat-icon [inline]="true">create</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

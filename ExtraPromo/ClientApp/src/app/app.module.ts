@@ -24,7 +24,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox'; 
 import { MatDialogModule } from '@angular/material/dialog';
 import { AddModifierDialogComponent } from './promotions/add/add-modifier-dialog/add-modifier-dialog.component';
-import { AddActionDialogComponent } from './promotions/add/add-action-dialog/add-action-dialog.component'; 
+import { AddActionDialogComponent } from './promotions/add/add-action-dialog/add-action-dialog.component';
+import { MatGridListModule } from '@angular/material/grid-list'; 
 
 @NgModule({
   declarations: [
@@ -94,7 +95,8 @@ import { AddActionDialogComponent } from './promotions/add/add-action-dialog/add
     ReactiveFormsModule,
     MatTooltipModule,
     MatDialogModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatGridListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

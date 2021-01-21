@@ -1,0 +1,37 @@
+mat-grid-tile {
+  background: lightblue;
+}
+
+.id-element {
+  background-color: #597bc9;
+  color: wheat;
+}
+
+.basic-info-header {
+  background-color: #3a80e8;
+}
+
+.basic-info-element {
+  background-color: #97b2db;
+}
+
+.modifiers-header {
+  background-color: #cc8029;
+}
+
+.modifiers-element {
+  background-color: #e6b57e;
+}
+
+.actions-header {
+  background-color: #e64d3c;
+}
+
+.actions-element {
+  background-color: #e3a29a;
+}
+
+.promotion-element {
+  border: 3px solid #97dbbe;
+  border-radius: 3px;
+}
