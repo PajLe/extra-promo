@@ -7,7 +7,7 @@ namespace ExtraPromo.DTOs
 {
     public class GetPromotionDto
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         public string Type { get; set; }
 

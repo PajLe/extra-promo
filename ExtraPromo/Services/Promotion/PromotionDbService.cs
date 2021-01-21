@@ -71,7 +71,7 @@ namespace ExtraPromo.Services.Promotion
                 {
                     promotionsToReturn.Add(new GetPromotionDto
                     {
-                        Id = promo.Id,
+                        Id = promo.Id.ToString(),
                         Type = promo.Type,
                         Description = promo.Description,
                         Modifiers = promo.Modifiers.Select(mod => new GetPromotionModifierDto { Id = mod.Key, Type = mod.Value }),
