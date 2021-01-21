@@ -53,10 +53,6 @@
     <TypeScriptCompile Include="ClientApp\src\app\_DTOs\userLoginDto.ts" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ClientApp\src\app\promotions\" />
-  </ItemGroup>
-
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">

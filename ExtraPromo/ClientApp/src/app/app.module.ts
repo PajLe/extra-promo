@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
+import { ListComponent } from './promotions/list/list.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -31,7 +31,7 @@ import { AddActionDialogComponent } from './promotions/add/add-action-dialog/add
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
+    ListComponent,
     FetchDataComponent,
     AddComponent,
     AddModifierDialogComponent,
@@ -57,7 +57,7 @@ import { AddActionDialogComponent } from './promotions/add/add-action-dialog/add
         path: 'promotions',
         children: [
           {
-            path: '', component: CounterComponent,
+            path: '', component: ListComponent,
             data: {
               forLoggedIn: true
             },
