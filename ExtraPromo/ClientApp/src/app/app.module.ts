@@ -25,7 +25,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AddModifierDialogComponent } from './promotions/add/add-modifier-dialog/add-modifier-dialog.component';
 import { AddActionDialogComponent } from './promotions/add/add-action-dialog/add-action-dialog.component';
-import { MatGridListModule } from '@angular/material/grid-list'; 
+import { MatGridListModule } from '@angular/material/grid-list';
+import { DeleteConfirmDialogComponent } from './promotions/list/delete-confirm-dialog/delete-confirm-dialog.component'; 
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
     FetchDataComponent,
     AddComponent,
     AddModifierDialogComponent,
-    AddActionDialogComponent
+    AddActionDialogComponent,
+    DeleteConfirmDialogComponent
   ],
   entryComponents: [
     AddModifierDialogComponent,
