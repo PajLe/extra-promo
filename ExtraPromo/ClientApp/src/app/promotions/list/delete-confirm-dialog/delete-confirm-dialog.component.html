@@ -1,0 +1,8 @@
+<h2 mat-dialog-title>Confirm</h2>
+<mat-dialog-content class="mat-typography">
+  <h3 class="text-danger">Are you sure you want to permanently delete promotion <span class="font-weight-bold text-secondary">{{ data }}</span>?</h3>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true">Yes</button>
+</mat-dialog-actions>
