@@ -143,5 +143,22 @@ namespace ExtraPromo.Controllers
 
             return Ok(new { Status = result, Message = message });
         }
+
+        [HttpGet("{promoId}")]
+        public async Task<IActionResult> GetPromotionWithId(string promoId)
+        {
+            GetPromotionDto result;
+            try
+            {
+                Guid id = Guid.Parse(promoId);
+                result = await _promotionDbService.GetPromotionWithId(id);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+
+            return Ok(result);
+        }
     }
 }

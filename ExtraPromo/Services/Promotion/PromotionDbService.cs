@@ -195,5 +195,23 @@ namespace ExtraPromo.Services.Promotion
                 return modifierToReturn;
             }
         }
+
+        public async Task<GetPromotionDto> GetPromotionWithId(Guid id)
+        {
+            using (var session = _cassandraDbConnectionProvider.Connect())
+            {
+                string cql = "SELECT * FROM promotions WHERE id = ?;";
+                var promo = await _cassandraQueryProvider.QuerySingleOrDefault<PromotionModel>(session, cql, id);
+                var promoToReturn = new GetPromotionDto
+                {
+                    Id = promo.Id.ToString(),
+                    Type = promo.Type,
+                    Description = promo.Description,
+                    Modifiers = promo.Modifiers.Select(mod => new GetPromotionModifierDto { Id = mod.Key, Type = mod.Value }),
+                    Actions = promo.Actions.Select(action => new GetPromotionActionDto { Id = action.Key, Type = action.Value })
+                };
+                return promoToReturn;
+            }
+        }
     }
 }

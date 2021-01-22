@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
+import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
@@ -31,26 +32,39 @@ export class EditComponent implements OnInit {
   editPromotionForm: FormGroup;
   promotionTypes: string[];
 
+  initPromo: Promotion;
+
   constructor(
     private _router: Router,
     private _formBuilder: FormBuilder,
     private _matDialog: MatDialog,
     private _alertifyService: AlertifyService,
-    private _http: HttpClient
+    private _http: HttpClient,
+    private _route: ActivatedRoute
   ) {
-    const promo: Promotion = this._router.getCurrentNavigation().extras.state.promotion;
-    if (promo) {
-      this.editedPromotion = promo;
-      this.existingModifierIds = promo.modifiers.map(mod => mod.id);
-      this.existingActionIds = promo.actions.map(action => action.id);
-      this.existingDescription = promo.description;
-      this.existingType = promo.type;
-    } else {
-      // TODO fetch promotion from DB
-    }
+    this.initPromo = this._router.getCurrentNavigation().extras.state?.promotion;
   }
 
   ngOnInit(): void {
+    debugger;
+    if (this.initPromo) {
+      this.init(this.initPromo);
+    }
+    else {
+      this._http.get(environment.apiUrl + 'promotion/' + this._route.snapshot.paramMap.get('id'))
+        .subscribe((response: Promotion) => {
+          debugger;
+          this.init(response);
+        });
+    }
+  }
+
+  private init(promo: Promotion) {
+    this.editedPromotion = promo;
+    this.existingModifierIds = promo.modifiers.map(mod => mod.id);
+    this.existingActionIds = promo.actions.map(action => action.id);
+    this.existingDescription = promo.description;
+    this.existingType = promo.type;
     this.editPromotionForm = this._formBuilder.group({
       type: [this.editedPromotion.type, Validators.required],
       description: [this.editedPromotion.description, Validators.required]

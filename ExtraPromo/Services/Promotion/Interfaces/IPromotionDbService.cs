@@ -17,6 +17,9 @@ namespace ExtraPromo.Services.Promotion.Interfaces
         public Task<PromotionModifierDto> GetModifierWithId(Guid id);
 
         public Task<PromotionActionDto> GetActionWithId(Guid id);
+
         Task<bool> EditPromotion(Guid id, EditPromotionDto promotion);
+
+        Task<GetPromotionDto> GetPromotionWithId(Guid id);
     }
 }
