@@ -61,7 +61,7 @@ export class ListComponent implements OnInit {
   }
 
   editPromo(promotion: Promotion): void {
-
+    this._router.navigate(['/promotions/edit', promotion.id], { state: { promotion: promotion } });
   }
 
   private deletePromotion(promotion: Promotion) {
@@ -71,6 +71,7 @@ export class ListComponent implements OnInit {
           this._alertifyService.error(response.message ?? "Couldn't delete the promotion.");
         } else {
           this._alertifyService.success(response.message ?? "Successfully deleted the promotion.");
+          this.promotions = this.promotions.filter(promo => promo.id !== promotion.id);
           this._router.navigate(["/promotions"]);
         }
       },
