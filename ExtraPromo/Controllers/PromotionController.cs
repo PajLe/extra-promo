@@ -104,5 +104,22 @@ namespace ExtraPromo.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("action/{actionId}")]
+        public async Task<IActionResult> GetActionWithId(string actionId)
+        {
+            PromotionActionDto result;
+            try
+            {
+                Guid id = Guid.Parse(actionId);
+                result = await _promotionDbService.GetActionWithId(id);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+
+            return Ok(result);
+        }
     }
 }
