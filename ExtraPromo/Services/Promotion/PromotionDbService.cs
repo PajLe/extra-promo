@@ -92,5 +92,21 @@ namespace ExtraPromo.Services.Promotion
                 return promotionsToReturn;
             }
         }
+
+        public async Task<PromotionModifierDto> GetModifierWithId(Guid id)
+        {
+            using (var session = _cassandraDbConnectionProvider.Connect())
+            {
+                string cql = "SELECT * FROM modifiers WHERE id = ?;";
+                var modifier = await _cassandraQueryProvider.QuerySingleOrDefault<ModifierModel>(session, cql, id);
+                var modifierToReturn = new PromotionModifierDto
+                {
+                    Id = modifier.Id.ToString(),
+                    Type = modifier.Type,
+                    Values = modifier.Values.ToArray()
+                };
+                return modifierToReturn;
+            }
+        }
     }
 }

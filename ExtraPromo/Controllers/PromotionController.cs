@@ -87,5 +87,22 @@ namespace ExtraPromo.Controllers
 
             return Ok(new { Status = result, Message = message });
         }
+
+        [HttpGet("modifier/{modId}")]
+        public async Task<IActionResult> GetModifierWithId(string modId)
+        {
+            PromotionModifierDto result;
+            try
+            {
+                Guid id = Guid.Parse(modId);
+                result = await _promotionDbService.GetModifierWithId(id);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+
+            return Ok(result);
+        }
     }
 }

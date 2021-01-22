@@ -13,5 +13,7 @@ namespace ExtraPromo.Services.Promotion.Interfaces
         public Task<IEnumerable<GetPromotionDto>> GetAllPromotions();
 
         public Task<bool> DeletePromotion(Guid id);
+
+        public Task<PromotionModifierDto> GetModifierWithId(Guid id);
     }
 }
