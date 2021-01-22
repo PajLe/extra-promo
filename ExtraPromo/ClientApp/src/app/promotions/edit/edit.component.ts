@@ -1,12 +1,15 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { Action } from '../../_DTOs/actionDto';
 import { Modifier } from '../../_DTOs/modifierDto';
 import { Promotion } from '../../_DTOs/promotionDto';
+import { EditPromotionResponse } from '../../_DTOs/responses/editPromotionResponse';
 import { AlertifyService } from '../../_services/alertify.service';
 import { AddActionDialogComponent } from '../add/add-action-dialog/add-action-dialog.component';
 import { AddModifierDialogComponent } from '../add/add-modifier-dialog/add-modifier-dialog.component';
@@ -22,6 +25,8 @@ export class EditComponent implements OnInit {
 
   existingModifierIds: string[] = [];
   existingActionIds: string[] = [];
+  existingDescription: string;
+  existingType: string;
   editedPromotion: Promotion; // mutable
   editPromotionForm: FormGroup;
   promotionTypes: string[];
@@ -30,13 +35,16 @@ export class EditComponent implements OnInit {
     private _router: Router,
     private _formBuilder: FormBuilder,
     private _matDialog: MatDialog,
-    private _alertifyService: AlertifyService
+    private _alertifyService: AlertifyService,
+    private _http: HttpClient
   ) {
     const promo: Promotion = this._router.getCurrentNavigation().extras.state.promotion;
     if (promo) {
       this.editedPromotion = promo;
       this.existingModifierIds = promo.modifiers.map(mod => mod.id);
       this.existingActionIds = promo.actions.map(action => action.id);
+      this.existingDescription = promo.description;
+      this.existingType = promo.type;
     } else {
       // TODO fetch promotion from DB
     }
@@ -199,6 +207,29 @@ export class EditComponent implements OnInit {
   }
 
   save(): void {
+    this.editedPromotion.type = this.editPromotionForm.get('type').value;
+    this.editedPromotion.description = this.editPromotionForm.get('description').value;
+    const promotionWithEditedFields: Promotion = {
+      type: (this.existingType !== this.editedPromotion.type) ? this.editedPromotion.type : null,
+      description: (this.existingDescription !== this.editedPromotion.description) ? this.editedPromotion.description : null,
+      actions: this.editedPromotion.actions.filter(action => !this.existingActionIds.includes(action.id)),
+      modifiers: this.editedPromotion.modifiers.filter(mod => !this.existingModifierIds.includes(mod.id)),
+      id: this.editedPromotion.id
+    };
 
+    this._http.put(environment.apiUrl + 'promotion/edit/' + promotionWithEditedFields.id, promotionWithEditedFields).pipe(
+      tap((response: EditPromotionResponse) => {
+        if (!response.status) {
+          this._alertifyService.error(response.message ?? "Couldn't insert the promotion.");
+        } else {
+          this._alertifyService.success(response.message ?? "Successfully added the promotion.");
+          this._router.navigate(["/promotions"]);
+        }
+      },
+        error => {
+          this._alertifyService.error("Unknown error.");
+          console.log(error.message);
+        })
+    ).subscribe();
   }
 }

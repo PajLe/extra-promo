@@ -121,5 +121,27 @@ namespace ExtraPromo.Controllers
 
             return Ok(result);
         }
+
+        [HttpPut("edit/{promoId}")]
+        public async Task<IActionResult> EditPromotionWithId(string promoId, [FromBody] EditPromotionDto promotion)
+        {
+            bool result;
+            string message;
+            try
+            {
+                Guid id = Guid.Parse(promoId);
+                result = await _promotionDbService.EditPromotion(id, promotion);
+                if (result)
+                    message = "Successfully edited the promotion.";
+                else
+                    message = "Couldn't edit the promotion.";
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+
+            return Ok(new { Status = result, Message = message });
+        }
     }
 }

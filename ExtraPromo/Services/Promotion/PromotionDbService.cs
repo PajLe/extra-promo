@@ -70,6 +70,74 @@ namespace ExtraPromo.Services.Promotion
             }
         }
 
+        public async Task<bool> EditPromotion(Guid promoId, EditPromotionDto promotion)
+        {
+            using (var session = _cassandraDbConnectionProvider.Connect())
+            {
+                var preparedModifierStatement =
+                    await session.PrepareAsync("INSERT INTO modifiers (id, type, values) VALUES (?, ?, ?);");
+                Dictionary<Guid, string> modifierWithType = new Dictionary<Guid, string>();
+                foreach (var mod in promotion.Modifiers)
+                {
+                    Guid id = Guid.NewGuid();
+                    modifierWithType.Add(id, mod.Type);
+                    var boundModifierStatement = preparedModifierStatement.Bind(id, mod.Type, mod.Values);
+                    await _cassandraQueryProvider.ExecuteAsync(session, boundModifierStatement);
+                }
+
+                var preparedActionStatement =
+                    await session.PrepareAsync("INSERT INTO actions (id, type, flat, percentage, freeship, items) VALUES (?, ?, ?, ?, ?, ?);");
+                Dictionary<Guid, string> actionsWithType = new Dictionary<Guid, string>();
+                foreach (var action in promotion.Actions)
+                {
+                    Guid id = Guid.NewGuid();
+                    actionsWithType.Add(id, action.Type);
+                    var boundActionStatement =
+                        preparedActionStatement.Bind(id, action.Type, action.Flat, action.Percentage, action.FreeShip, action.Items);
+                    await _cassandraQueryProvider.ExecuteAsync(session, boundActionStatement);
+                }
+
+                char[] charsToTrim = { ',', ' ' };
+                bool doUpdate = false;
+                string cql = "UPDATE promotions SET ";
+                if (!string.IsNullOrWhiteSpace(promotion.Description))
+                {
+                    cql += $" description = '{promotion.Description}' , ";
+                    doUpdate = true;
+                }
+                if (!string.IsNullOrWhiteSpace(promotion.Type))
+                {
+                    cql += $" type = '{promotion.Type}' , ";
+                    doUpdate = true;
+                }
+                if (modifierWithType.Any())
+                {
+                    cql += $" modifiers = modifiers + {{ ";
+                    foreach (var modWithType in modifierWithType)
+                        cql += $" {modWithType.Key}:'{modWithType.Value}', ";
+                    cql = cql.TrimEnd(charsToTrim);
+                    cql += $" }} , ";
+                    doUpdate = true;
+                }
+                if (actionsWithType.Any())
+                {
+                    cql += $" actions = actions + {{ ";
+                    foreach (var actionWithType in actionsWithType)
+                        cql += $" {actionWithType.Key}:'{actionWithType.Value}', ";
+                    cql = cql.TrimEnd(charsToTrim);
+                    cql += $" }} , ";
+                    doUpdate = true;
+                }
+                cql = cql.TrimEnd(charsToTrim);
+                cql += " WHERE id = ?;";
+
+                if (doUpdate)
+                    await _cassandraQueryProvider.ExecuteAsync(session, cql, promoId);
+
+                return true;
+            }
+        }
+
         public async Task<PromotionActionDto> GetActionWithId(Guid id)
         {
             using (var session = _cassandraDbConnectionProvider.Connect())
