@@ -1,0 +1,204 @@
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { Action } from '../../_DTOs/actionDto';
+import { Modifier } from '../../_DTOs/modifierDto';
+import { Promotion } from '../../_DTOs/promotionDto';
+import { AlertifyService } from '../../_services/alertify.service';
+import { AddActionDialogComponent } from '../add/add-action-dialog/add-action-dialog.component';
+import { AddModifierDialogComponent } from '../add/add-modifier-dialog/add-modifier-dialog.component';
+import { ViewActionDialogComponent } from './view-action-dialog/view-action-dialog.component';
+import { ViewModifierDialogComponent } from './view-modifier-dialog/view-modifier-dialog.component';
+
+@Component({
+  selector: 'app-edit',
+  templateUrl: './edit.component.html',
+  styleUrls: ['./edit.component.css']
+})
+export class EditComponent implements OnInit {
+
+  existingModifierIds: string[] = [];
+  existingActionIds: string[] = [];
+  editedPromotion: Promotion; // mutable
+  editPromotionForm: FormGroup;
+  promotionTypes: string[];
+
+  constructor(
+    private _router: Router,
+    private _formBuilder: FormBuilder,
+    private _matDialog: MatDialog,
+    private _alertifyService: AlertifyService
+  ) {
+    const promo: Promotion = this._router.getCurrentNavigation().extras.state.promotion;
+    if (promo) {
+      this.editedPromotion = promo;
+      this.existingModifierIds = promo.modifiers.map(mod => mod.id);
+      this.existingActionIds = promo.actions.map(action => action.id);
+    } else {
+      // TODO fetch promotion from DB
+    }
+  }
+
+  ngOnInit(): void {
+    this.editPromotionForm = this._formBuilder.group({
+      type: [this.editedPromotion.type, Validators.required],
+      description: [this.editedPromotion.description, Validators.required]
+    });
+
+    this.promotionTypes = [];
+    this.fillPromotionTypes();
+  }
+
+  private fillPromotionTypes(): void {
+    this.promotionTypes.push("Cart Promotion");
+    this.promotionTypes.push("Promo Code");
+  }
+
+  cancel(): void {
+    this._router.navigate(["/promotions"]);
+  }
+
+  addModifierDialog(modifier: Modifier): void {
+    let dialogRef;
+    if (modifier)
+      dialogRef = this._matDialog.open(AddModifierDialogComponent, {
+        maxHeight: '650px',
+        width: '600px',
+        data: {
+          modifier: modifier
+        }
+      });
+    else
+      dialogRef = this._matDialog.open(AddModifierDialogComponent, {
+        maxHeight: '650px',
+        width: '600px'
+      });
+    dialogRef.afterClosed().subscribe((modifier: Modifier) => {
+      if (modifier) {
+        if (this.editedPromotion.modifiers.filter(mod => mod.type === modifier.type).length === 0)
+          this.editedPromotion.modifiers.push(modifier);
+        else {
+          this._alertifyService.error("Cannot add two modifiers with the same type.");
+          this.addModifierDialog(modifier);
+        }
+      }
+    });
+  }
+
+  addActionDialog(): void {
+    const dialogRef = this._matDialog.open(AddActionDialogComponent, {
+      maxHeight: '650px',
+      width: '600px',
+    });
+    dialogRef.afterClosed().subscribe((action: Action) => {
+      if (action) {
+        this.editedPromotion.actions.push(action);
+      }
+    });
+  }
+
+  removeAction(index: number): void {
+    this.editedPromotion.actions = this.editedPromotion.actions.filter((action, i) => i != index);
+  }
+
+  editAction(index: number): void {
+    const actionToEdit: Action = this.editedPromotion.actions[index];
+    const dialogRef = this._matDialog.open(AddActionDialogComponent, {
+      maxHeight: '650px',
+      width: '600px',
+      data: {
+        action: actionToEdit
+      }
+    });
+    dialogRef.afterClosed().subscribe((action: Action) => {
+      if (action) {
+        this.editedPromotion.actions[index] = action;
+      }
+    });
+  }
+
+  removeModifier(index: number): void {
+    this.editedPromotion.modifiers = this.editedPromotion.modifiers.filter((modifier, i) => i != index);
+  }
+
+  editModifier(index: number): void {
+    const modifierToEdit: Modifier = this.editedPromotion.modifiers[index];
+    const dialogRef = this._matDialog.open(AddModifierDialogComponent, {
+      maxHeight: '650px',
+      width: '600px',
+      data: {
+        modifier: modifierToEdit
+      }
+    });
+    dialogRef.afterClosed().subscribe((modifier: Modifier) => {
+      if (modifier) {
+        this.editedPromotion.modifiers[index] = modifier;
+      }
+    });
+  }
+
+  cachedActions: Action[] = [];
+  viewAction(actionId: string): void {
+    const cachedAction: Action[] = this.cachedActions.filter(cachedAction => cachedAction.id === actionId);
+    if (cachedAction.length === 1) {
+      this._matDialog.open(ViewActionDialogComponent, {
+        maxHeight: '650px',
+        width: '600px',
+        data: {
+          action: cachedAction[0],
+          actionId: cachedAction[0].id
+        }
+      });
+    } else {
+      const dialogRef = this._matDialog.open(ViewActionDialogComponent, {
+        maxHeight: '650px',
+        width: '600px',
+        data: {
+          action: undefined,
+          actionId: actionId
+        }
+      });
+      dialogRef.afterClosed().subscribe((action: Action) => {
+        if (action) {
+          this.cachedActions.push(action);
+        }
+      });
+    }
+  }
+
+  cachedModifiers: Modifier[] = [];
+  viewModifier(modifierId: string): void {
+    const cachedModifier: Modifier[] = this.cachedModifiers.filter(cachedModifier => cachedModifier.id === modifierId);
+    if (cachedModifier.length === 1) {
+      this._matDialog.open(ViewModifierDialogComponent, {
+        maxHeight: '650px',
+        width: '600px',
+        data: {
+          modifier: cachedModifier[0],
+          modifierId: cachedModifier[0].id
+        }
+      });
+    } else {
+      const dialogRef = this._matDialog.open(ViewModifierDialogComponent, {
+        maxHeight: '650px',
+        width: '600px',
+        data: {
+          modifier: undefined,
+          modifierId: modifierId
+        }
+      });
+      dialogRef.afterClosed().subscribe((modifier: Modifier) => {
+        if (modifier) {
+          this.cachedModifiers.push(modifier);
+        }
+      });
+    }
+  }
+
+  save(): void {
+
+  }
+}

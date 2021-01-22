@@ -26,7 +26,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { AddModifierDialogComponent } from './promotions/add/add-modifier-dialog/add-modifier-dialog.component';
 import { AddActionDialogComponent } from './promotions/add/add-action-dialog/add-action-dialog.component';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { DeleteConfirmDialogComponent } from './promotions/list/delete-confirm-dialog/delete-confirm-dialog.component'; 
+import { DeleteConfirmDialogComponent } from './promotions/list/delete-confirm-dialog/delete-confirm-dialog.component';
+import { EditComponent } from './promotions/edit/edit.component';
+import { ViewModifierDialogComponent } from './promotions/edit/view-modifier-dialog/view-modifier-dialog.component';
+import { ViewActionDialogComponent } from './promotions/edit/view-action-dialog/view-action-dialog.component'; 
 
 @NgModule({
   declarations: [
@@ -38,7 +41,10 @@ import { DeleteConfirmDialogComponent } from './promotions/list/delete-confirm-d
     AddComponent,
     AddModifierDialogComponent,
     AddActionDialogComponent,
-    DeleteConfirmDialogComponent
+    DeleteConfirmDialogComponent,
+    EditComponent,
+    ViewModifierDialogComponent,
+    ViewActionDialogComponent
   ],
   entryComponents: [
     AddModifierDialogComponent,
@@ -68,6 +74,13 @@ import { DeleteConfirmDialogComponent } from './promotions/list/delete-confirm-d
           },
           {
             path: 'add', component: AddComponent,
+            data: {
+              forLoggedIn: true
+            },
+            canActivate: [AuthGuard]
+          },
+          {
+            path: 'edit/:id', component: EditComponent,
             data: {
               forLoggedIn: true
             },

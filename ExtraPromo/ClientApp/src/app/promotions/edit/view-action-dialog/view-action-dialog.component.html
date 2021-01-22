@@ -1,0 +1,47 @@
+<h1 mat-dialog-title class="text-warning border-bottom">View action</h1>
+<div mat-dialog-content>
+  <ng-container *ngIf="(act | async) as act">
+    <div class="row">
+      <mat-form-field appearance="outline" class="w-100 ml-2 mr-2">
+        <mat-label>Type</mat-label>
+        <input matInput readonly [value]="act.type">
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field appearance="outline" class="w-100 ml-2 mr-2">
+        <mat-label>Flat discount</mat-label>
+        <input matInput readonly [value]="act.flat">
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field appearance="outline" class="w-100 ml-2 mr-2">
+        <mat-label>Percentage discount</mat-label>
+        <input matInput readonly [value]="act.percentage">
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-checkbox readonly class="ml-4" [checked]="act.freeShip">Free shipping</mat-checkbox>
+    </div>
+  </ng-container>
+
+
+  <div *ngIf="(act | async) as act">
+    <div *ngIf="act.type !== 'Cart Discount'">
+      <h5 class="text-secondary mt-3">Items</h5>
+
+      <div *ngFor="let actionItem of act.items ">
+        <div class="row justify-content-center align-items-center">
+          <mat-form-field appearance="outline" class="col-10 ml-2">
+            <mat-label>Item</mat-label>
+            <input matInput readonly [value]="actionItem">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<div mat-dialog-actions class="border-top" align="right">
+  <button mat-flat-button color="primary" (click)="close()">Close</button>
+</div>

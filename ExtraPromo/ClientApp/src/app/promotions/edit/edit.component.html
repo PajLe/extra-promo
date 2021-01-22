@@ -1,0 +1,121 @@
+<h1 class="text-warning mb-2">Edit Promotion</h1>
+
+<div class="row justify-content-around text-center border border-info rounded shadow-sm">
+
+  <!-- Promotion info -->
+  <div class="col-md-3 border">
+    <h3 class="text-warning border-bottom">Promotion</h3>
+    <form [formGroup]="editPromotionForm" (ngSubmit)="save()">
+      <div>
+        <div class="row">
+          <mat-form-field appearance="outline" class="w-100 ml-2 mr-2">
+            <mat-label>Promotion type</mat-label>
+            <mat-select formControlName="type" required>
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let promoType of promotionTypes" [value]="promoType">
+                {{promoType}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="editPromotionForm.get('type').hasError('required')">Please choose a promotion type</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline" class="w-100 ml-2 mr-2">
+            <mat-label>Description</mat-label>
+            <textarea required matInput placeholder="Ex. Get one FREE item" formControlName="description"></textarea>
+            <mat-error *ngIf="editPromotionForm.get('description').hasError('required')">Please enter a description</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <button mat-raised-button color="primary" type="submit" [disabled]="!editPromotionForm.valid || editedPromotion.modifiers.length === 0 || editedPromotion.actions.length === 0">
+          Save
+        </button>
+        <button mat-stroked-button color="accent" type="button" (click)="cancel()">
+          Cancel
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- Modifiers -->
+  <div class="col-md border">
+    <h3 class="text-warning border-bottom">Modifiers</h3>
+
+    <div class="row border-bottom mt-1" *ngFor="let modifier of editedPromotion.modifiers; let i=index">
+      <div class="col-10">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Type</mat-label>
+          <input readonly matInput [value]="modifier.type">
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <div class="row">
+          <button mat-icon-button color="warn" (click)="removeModifier(i)"
+                  [disabled]="existingModifierIds.includes(modifier.id)"
+                  matTooltip="Cannot remove already existing modifier"
+                  [matTooltipDisabled]="!existingModifierIds.includes(modifier.id)"
+                  matTooltipPosition="right">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </div>
+        <div class="row" *ngIf="!existingModifierIds.includes(modifier.id)">
+          <button mat-icon-button color="basic" (click)="editModifier(i)">
+            <mat-icon>create</mat-icon>
+          </button>
+        </div>
+        <div class="row" *ngIf="existingModifierIds.includes(modifier.id)">
+          <button mat-icon-button color="basic" (click)="viewModifier(modifier.id)">
+            <mat-icon>open_in_full</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <button mat-icon-button class="mt-1" color="primary" type="button" (click)="addModifierDialog(undefined)" matTooltip="Add Modifier" matTooltipPosition="right">
+      <mat-icon>add_box</mat-icon>
+    </button>
+  </div>
+
+  <!-- Actions -->
+  <div class="col-md border">
+    <h3 class="text-warning border-bottom">Actions</h3>
+
+    <div class="row justify-content-start border-bottom mt-1" *ngFor="let action of editedPromotion.actions; let i=index">
+      <div class="col-10">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Type</mat-label>
+          <input readonly matInput [value]="action.type">
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <div class="row">
+          <button mat-icon-button color="warn" (click)="removeAction(i)"
+                  [disabled]="existingActionIds.includes(action.id)"
+                  matTooltip="Cannot remove already existing action"
+                  [matTooltipDisabled]="!existingActionIds.includes(action.id)"
+                  matTooltipPosition="right">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </div>
+        <div class="row">
+          <button mat-icon-button color="basic" (click)="editAction(i)" *ngIf="!existingActionIds.includes(action.id)">
+            <mat-icon>create</mat-icon>
+          </button>
+        </div>
+        <div class="row">
+          <button mat-icon-button color="basic" (click)="viewAction(action.id)" *ngIf="existingActionIds.includes(action.id)">
+            <mat-icon>open_in_full</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <button mat-icon-button color="primary" type="button" (click)="addActionDialog()" matTooltip="Add Action" matTooltipPosition="right">
+      <mat-icon>add_box</mat-icon>
+    </button>
+  </div>
+</div>
+
