@@ -16,5 +16,7 @@ namespace ExtraPromo.DbSetup.Cassandra.Models
         public double Percentage { get; set; }
 
         public IEnumerable<string> Items { get; set; }
+
+        public string Type { get; set; }
     }
 }
