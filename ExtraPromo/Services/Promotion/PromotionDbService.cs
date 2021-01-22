@@ -36,14 +36,14 @@ namespace ExtraPromo.Services.Promotion
                 }
 
                 var preparedActionStatement =
-                    await session.PrepareAsync("INSERT INTO actions (id, flat, percentage, freeship, items) VALUES (?, ?, ?, ?, ?);");
+                    await session.PrepareAsync("INSERT INTO actions (id, type, flat, percentage, freeship, items) VALUES (?, ?, ?, ?, ?, ?);");
                 Dictionary<Guid, string> actionsWithType = new Dictionary<Guid, string>();
                 foreach (var action in addPromotionDto.Actions)
                 {
                     Guid id = Guid.NewGuid();
                     actionsWithType.Add(id, action.Type);
                     var boundActionStatement =
-                        preparedActionStatement.Bind(id, action.Flat, action.Percentage, action.FreeShip, action.Items);
+                        preparedActionStatement.Bind(id, action.Type, action.Flat, action.Percentage, action.FreeShip, action.Items);
                     await _cassandraQueryProvider.ExecuteAsync(session, boundActionStatement);
                 }
 
@@ -67,6 +67,25 @@ namespace ExtraPromo.Services.Promotion
                 string cql = "DELETE FROM promotions WHERE id = ? IF EXISTS;";
                 var applied = await _cassandraQueryProvider.ExecuteAsync(session, cql, id);
                 return applied.FirstOrDefault().GetValue<bool>(0);
+            }
+        }
+
+        public async Task<PromotionActionDto> GetActionWithId(Guid id)
+        {
+            using (var session = _cassandraDbConnectionProvider.Connect())
+            {
+                string cql = "SELECT * FROM actions WHERE id = ?;";
+                var action = await _cassandraQueryProvider.QuerySingleOrDefault<ActionModel>(session, cql, id);
+                var actionToReturn = new PromotionActionDto
+                {
+                    Id = action.Id.ToString(),
+                    Type = action.Type,
+                    Flat = action.Flat,
+                    Percentage = action.Percentage,
+                    FreeShip = action.FreeShip,
+                    Items = action.Items.ToArray()
+                };
+                return actionToReturn;
             }
         }
 
