@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { ListComponent } from './promotions/list/list.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -37,7 +36,6 @@ import { ViewActionDialogComponent } from './promotions/edit/view-action-dialog/
     NavMenuComponent,
     HomeComponent,
     ListComponent,
-    FetchDataComponent,
     AddComponent,
     AddModifierDialogComponent,
     AddActionDialogComponent,
