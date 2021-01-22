@@ -1,6 +1,6 @@
-<h1 mat-dialog-title class="text-warning border-bottom">View action</h1>
-<div mat-dialog-content>
-  <ng-container *ngIf="(act | async) as act">
+<ng-container *ngIf="(act | async) as act">
+  <h1 mat-dialog-title class="text-warning border-bottom">Action: <span class="font-weight-bold text-secondary">{{ act.id }}</span></h1>
+  <div mat-dialog-content>
     <div class="row">
       <mat-form-field appearance="outline" class="w-100 ml-2 mr-2">
         <mat-label>Type</mat-label>
@@ -22,14 +22,11 @@
     <div class="row">
       <mat-checkbox color="accent" disabled class="ml-4" [checked]="act.freeShip">Free shipping</mat-checkbox>
     </div>
-  </ng-container>
 
-
-  <div *ngIf="(act | async) as act">
     <div *ngIf="act.type !== 'Cart Discount'">
       <h5 class="text-secondary mt-3">Items</h5>
 
-      <div *ngFor="let actionItem of act.items ">
+      <div *ngFor="let actionItem of act.items">
         <div class="row justify-content-center align-items-center">
           <mat-form-field appearance="outline" class="col-10 ml-2">
             <mat-label>Item</mat-label>
@@ -41,7 +38,7 @@
 
   </div>
 
-</div>
-<div mat-dialog-actions class="border-top" align="right">
-  <button mat-flat-button color="primary" (click)="close()">Close</button>
-</div>
+  <div mat-dialog-actions class="border-top" align="right">
+    <button mat-flat-button color="primary" (click)="close()">Close</button>
+  </div>
+</ng-container>

@@ -1,28 +1,28 @@
-<h1 mat-dialog-title class="text-warning border-bottom">View modifier</h1>
-<div mat-dialog-content>
-  <ng-container *ngIf="(mod | async) as mod">
+<ng-container *ngIf="(mod | async) as mod">
+
+  <h1 mat-dialog-title class="text-warning border-bottom">Modifier: <span class="font-weight-bold text-secondary">{{ mod.id }}</span></h1>
+  <div mat-dialog-content>
     <div class="row">
       <mat-form-field appearance="outline" class="w-100 ml-2 mr-2">
         <mat-label>Type</mat-label>
         <input matInput readonly [value]="mod.type">
       </mat-form-field>
     </div>
-  </ng-container>
 
+    <div>
+      <h5 class="text-secondary mt-3">Values</h5>
 
-  <div *ngIf="(mod | async) as mod">
-    <h5 class="text-secondary mt-3">Values</h5>
-
-    <div *ngFor="let modValue of mod.values ">
-      <div class="row justify-content-center align-items-center">
-        <mat-form-field appearance="outline" class="col-10 ml-2">
-          <mat-label>Value</mat-label>
-          <input matInput readonly [value]="modValue">
-        </mat-form-field>
+      <div *ngFor="let modValue of mod.values ">
+        <div class="row justify-content-center align-items-center">
+          <mat-form-field appearance="outline" class="col-10 ml-2">
+            <mat-label>Value</mat-label>
+            <input matInput readonly [value]="modValue">
+          </mat-form-field>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<div mat-dialog-actions class="border-top" align="right">
-  <button mat-flat-button color="primary" (click)="close()">Close</button>
-</div>
+  <div mat-dialog-actions class="border-top" align="right">
+    <button mat-flat-button color="primary" (click)="close()">Close</button>
+  </div>
+</ng-container>
